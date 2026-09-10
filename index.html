@@ -1,0 +1,362 @@
+<!-- index.html -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Click Fast!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="min-h-screen bg-slate-950 text-white">
+    <!-- Navbar -->
+    <header class="border-b border-slate-800">
+      <nav class="mx-auto flex items-center justify-between px-6 py-4">
+        <h1 class="text-2xl font-bold pl-8">Click Fast!</h1>
+
+        <div class="flex gap-3 justify-center">
+          <button
+            data-view="home"
+            class="nav-btn rounded-lg px-4 py-2 hover:bg-slate-800"
+          >
+            Home
+          </button>
+
+          <button
+            data-view="history"
+            class="nav-btn rounded-lg px-4 py-2 hover:bg-slate-800"
+          >
+            History
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-6 py-10">
+      <!-- ========================= -->
+      <!-- HOME VIEW -->
+      <!-- ========================= -->
+
+      <section id="view-home" class="view">
+        <div
+          class="flex min-h-[70vh] flex-col items-center justify-center text-center"
+        >
+          <h2 class="mb-4 text-5xl font-bold">Click Fast!</h2>
+
+          <p class="mb-8 max-w-xl text-slate-400">
+            Test your speed, reflexes and precision. Click the target as many
+            times as possible before time runs out.
+          </p>
+
+          <div class="mb-8 rounded-xl bg-slate-900 p-5">
+            <p class="text-sm text-slate-400">Best Score</p>
+
+            <p id="home-record" class="text-3xl font-bold">0</p>
+          </div>
+
+          <button
+            data-view="config"
+            class="nav-btn rounded-xl bg-blue-600 px-8 py-3 font-semibold hover:bg-blue-500"
+          >
+            Play
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================= -->
+      <!-- CONFIG VIEW -->
+      <!-- ========================= -->
+
+      <section id="view-config" class="view hidden">
+        <div class="mx-auto max-w-xl">
+          <h2 class="flex justify-center mb-8 text-3xl font-bold ">
+            Game Configuration
+          </h2>
+
+          <form id="config-form" class="space-y-6 rounded-2xl bg-slate-900 p-6">
+            <!-- Pseudo -->
+            <div>
+              <label for="pseudo" class="mb-2 block font-medium">
+                Pseudo
+              </label>
+
+              <input
+                type="text"
+                id="pseudo"
+                minlength="2"
+                maxlength="20"
+                placeholder="Enter your pseudo"
+                class="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <!-- Mode -->
+            <div>
+              <p class="mb-3 font-medium ">Game Mode</p>
+
+              <div class="grid grid-cols-3 gap-3">
+                <label class="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="mode"
+                    value="classic"
+                    checked
+                    class="peer hidden"
+                  />
+
+                  <div
+                    class="rounded-lg border border-slate-700 p-3 text-center peer-checked:border-blue-500 peer-checked:bg-blue-600"
+                  >
+                    Classic
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="mode"
+                    value="precision"
+                    class="peer hidden"
+                  />
+
+                  <div
+                    class="rounded-lg border border-slate-700 p-3 text-center peer-checked:border-blue-500 peer-checked:bg-blue-600"
+                  >
+                    Precision
+                  </div>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="mode"
+                    value="challenge"
+                    class="peer hidden"
+                  />
+
+                  <div
+                    class="rounded-lg border border-slate-700 p-3 text-center peer-checked:border-blue-500 peer-checked:bg-blue-600"
+                  >
+                    Challenge
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Duration -->
+            <div>
+              <label for="duration" class="mb-2 block font-medium">
+                Duration
+              </label>
+
+              <select
+                id="duration"
+                class="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3"
+              >
+                <option value="10">10 seconds</option>
+                <option value="20">20 seconds</option>
+                <option value="30">30 seconds</option>
+
+              </select>
+            </div>
+
+            <!-- Difficulty -->
+            <div>
+              <label for="difficulty" class="mb-2 block font-medium">
+                Difficulty
+              </label>
+
+              <select
+                id="difficulty"
+                class="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3"
+              >
+                <option value="easy">Easy</option>
+
+                <option value="medium" selected>Medium</option>
+
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+
+            <div class="flex gap-3">
+              <button
+                type="button"
+                data-view="home"
+                class="nav-btn w-full rounded-lg bg-slate-700 py-3 hover:bg-slate-600"
+              >
+                Back
+              </button>
+
+              <button
+                type="submit"
+                class="w-full rounded-lg bg-blue-600 py-3 font-semibold hover:bg-blue-500"
+              >
+                Start Game
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ========================= -->
+      <!-- GAME VIEW -->
+      <!-- ========================= -->
+
+      <section id="view-game" class="view hidden">
+        <div class="flex flex-col items-center">
+          <!-- HUD -->
+          <div class="mb-6 grid w-full max-w-lg grid-cols-3 gap-4">
+            <div class="rounded-xl bg-slate-900 p-4 text-center">
+              <p class="text-sm text-slate-400">Time</p>
+
+              <p id="game-time" class="text-2xl font-bold">10</p>
+            </div>
+
+            <div class="rounded-xl bg-slate-900 p-4 text-center">
+              <p class="text-sm text-slate-400">Score</p>
+
+              <p id="game-score" class="text-2xl font-bold">0</p>
+            </div>
+
+            <div class="rounded-xl bg-slate-900 p-4 text-center">
+              <p class="text-sm text-slate-400">Record</p>
+
+              <p id="game-record" class="text-2xl font-bold">0</p>
+            </div>
+          </div>
+
+          <!-- Precision HUD -->
+          <div
+            id="precision-hud"
+            class="mb-5 hidden gap-5 text-sm text-slate-300"
+          >
+            <span>
+              Misses:
+              <strong id="game-misses"> 0 </strong>
+            </span>
+
+            <span>
+              Accuracy:
+              <strong id="game-accuracy"> 100% </strong>
+            </span>
+          </div>
+
+          <!-- Arena -->
+          <div
+            id="game-arena"
+            class="relative h-[360px] w-[360px] overflow-hidden rounded-2xl border-2 border-slate-700 bg-slate-900 sm:h-[500px] sm:w-[500px]"
+          >
+            <!-- Target -->
+            <button
+              id="target"
+              class="absolute h-[60px] w-[60px] rounded-full bg-red-500 shadow-lg"
+              aria-label="Target"
+            ></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= -->
+      <!-- RESULTS VIEW -->
+      <!-- ========================= -->
+
+      <section id="view-results" class="view hidden">
+        <div class="mx-auto max-w-md text-center">
+          <div class="rounded-2xl bg-slate-900 p-8">
+            <h2 class="mb-8 text-3xl font-bold">Game Over</h2>
+
+            <div class="space-y-4">
+              <div>
+                <p class="text-slate-400">Score</p>
+
+                <p id="result-score" class="text-4xl font-bold">0</p>
+              </div>
+
+              <div>
+                <p class="text-slate-400">Misses</p>
+
+                <p id="result-misses">0</p>
+              </div>
+
+              <div>
+                <p class="text-slate-400">Accuracy</p>
+
+                <p id="result-accuracy">0%</p>
+              </div>
+
+              <p id="new-record" class="hidden font-bold text-yellow-400">
+                🎉 New Record!
+              </p>
+            </div>
+
+            <div class="mt-8 flex gap-3">
+              <button
+                data-view="config"
+                class="nav-btn w-full rounded-lg bg-blue-600 py-3 hover:bg-blue-500"
+              >
+                Play Again
+              </button>
+
+              <button
+                data-view="home"
+                class="nav-btn w-full rounded-lg bg-slate-700 py-3 hover:bg-slate-600"
+              >
+                Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================= -->
+      <!-- HISTORY VIEW -->
+      <!-- ========================= -->
+
+      <section id="view-history" class="view hidden">
+        <div class="mx-auto max-w-4xl">
+          <div class="mb-6 flex items-center justify-between">
+            <h2 class="text-3xl font-bold">Game History</h2>
+
+            <button
+              id="clear-history"
+              class="rounded-lg bg-red-600 px-4 py-2 hover:bg-red-500"
+            >
+              Clear History
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <div class="mb-6 flex gap-3">
+            <select
+              id="history-filter"
+              class="rounded-lg bg-slate-800 px-4 py-2"
+            >
+              <option value="all">All Modes</option>
+
+              <option value="classic">Classic</option>
+
+              <option value="precision">Precision</option>
+
+              <option value="challenge">Challenge</option>
+            </select>
+
+            <select id="history-sort" class="rounded-lg bg-slate-800 px-4 py-2">
+              <option value="recent">Most Recent</option>
+
+              <option value="score">Best Score</option>
+            </select>
+          </div>
+
+          <div id="history-list" class="space-y-3">
+            <p class="text-slate-400">No games played yet.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
