@@ -1,4 +1,3 @@
-// js/app.js
 
 const views = document.querySelectorAll(".view");
 const navigationButtons = document.querySelectorAll(".nav-btn");
@@ -81,6 +80,9 @@ function runTimer(str) {
                 clearInterval(countdown);
                 viewGame.classList.add("hidden")
                 resultScore.textContent = gameRecord.textContent
+                resultMisses.textContent = missesCounter
+                let Accuracy = (Number(counter) * 100) / (Number(missesCounter) + Number(counter)) 
+                resultAccuracy.textContent = Accuracy
                 viewResults.classList.remove("hidden")
                 return;
             }
@@ -91,7 +93,19 @@ function runTimer(str) {
     }
 
 }
-target.addEventListener("click", () => {
+
+const gameArena = document.querySelector("#game-arena")
+const resultMisses = document.querySelector("#result-misses")
+const resultAccuracy = document.querySelector("#result-accuracy")
+
+let missesCounter = 0
+gameArena.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    missesCounter ++
+})
+
+target.addEventListener("click", (e) => {
+     e.stopPropagation(); 
     counter++
     gameScore.textContent = counter
     if (Number(gameRecord.textContent) < Number(gameScore.textContent)){
