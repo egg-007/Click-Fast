@@ -3,13 +3,13 @@ const views = document.querySelectorAll(".view");
 const navigationButtons = document.querySelectorAll(".nav-btn");
 
 function showView(viewName) {
-    
+
     views.forEach((view) => {
         view.classList.add("hidden");
     });
-    
+
     const selectedView = document.querySelector(`#view-${viewName}`);
-    
+
     if (selectedView) {
         selectedView.classList.remove("hidden");
     }
@@ -35,15 +35,35 @@ const configForm = document.querySelector("#config-form");
 configForm.addEventListener("submit", (event) => {
 
     event.preventDefault();
+    counter = 0
+    missesCounter = 0
+    gameScore.textContent = 0
+    document.querySelector("#game-misses").textContent = 0 
+    gameAccuracy.textContent = "100%"
+
     gameMode = document.querySelector(`input[name="mode"]:checked`).value
-    if(gameMode === "precision"){
+    if (gameMode === "precision") {
         precisionHud.classList.remove("hidden")
         precisionHud.classList.add("flex")
-    }else{
+    } else {
         precisionHud.classList.add("hidden")
-        precisionHud.classList.remove("flex")        
+        precisionHud.classList.remove("flex")
+    }
+    if (difficulty.value === "easy") {
+        target.style.width = "80px"
+        target.style.height = "80px"
     }
 
+    if (difficulty.value === "medium") {
+        target.style.width = "60px"
+        target.style.height = "60px"
+    }
+
+    if (difficulty.value === "hard") {
+        target.style.width = "40px"
+        target.style.height = "40px"
+    }
+    time.textContent = duration.value
     showView("game");
 
 });
@@ -70,7 +90,7 @@ const time = document.querySelector("#game-time")
 const gameScore = document.querySelector("#game-score")
 const gameRecord = document.querySelector("#game-record")
 const duration = document.querySelector("#duration")
-
+const difficulty = document.querySelector("#difficulty")
 
 
 const viewGame = document.querySelector("#view-game")
@@ -81,39 +101,39 @@ const resultScore = document.querySelector('#result-score')
 const homeRecord = document.querySelector('#home-record')
 
 function runTimer() {
-        let timeLeft = Number(time.textContent);
+    let timeLeft = Number(time.textContent);
 
-        const countdown = setInterval(() => {
+    const countdown = setInterval(() => {
 
-            if (timeLeft === 0) {
-                clearInterval(countdown);
-                viewGame.classList.add("hidden")
-                resultScore.textContent = counter
-                resultMisses.textContent = missesCounter
-                let Accuracy = (Number(counter) * 100) / (Number(missesCounter) + Number(counter))
-                resultAccuracy.textContent = Accuracy
-                viewResults.classList.remove("hidden")
-                return;
-            }
+        if (timeLeft === 0) {
+            clearInterval(countdown);
+            viewGame.classList.add("hidden")
+            resultScore.textContent = counter
+            resultMisses.textContent = missesCounter
+            let Accuracy = (Number(counter) * 100) / (Number(missesCounter) + Number(counter))
+            resultAccuracy.textContent = Accuracy
+            viewResults.classList.remove("hidden")
+            return;
+        }
 
-            timeLeft--;
-            time.textContent = timeLeft;
-        }, 1000);
-    
+        timeLeft--;
+        time.textContent = timeLeft;
+    }, 1000);
+
 
 }
 
 const gameArena = document.querySelector("#game-arena")
 const resultMisses = document.querySelector("#result-misses")
 const resultAccuracy = document.querySelector("#result-accuracy")
-const gameAccuracy = document.querySelector("#game-accuracy") 
+const gameAccuracy = document.querySelector("#game-accuracy")
 const precisionHud = document.querySelector("#precision-hud")
 
 
 
 let missesCounter = 0
 gameArena.addEventListener("click", (e) => {
-    if(gameMode === "precision"){
+    if (gameMode === "precision") {
         missesCounter++;
         gameAccuracy.textContent = `${Math.round((counter * 100) / (counter + missesCounter))}%`
         document.querySelector("#game-misses").textContent = missesCounter
@@ -125,13 +145,13 @@ target.addEventListener("click", (e) => {
     e.stopPropagation();
     counter++
     gameScore.textContent = counter
-    if(gameMode === "precision"){
-                gameAccuracy.textContent = `${Math.round((counter * 100) / (counter + missesCounter))}%`
+    if (gameMode === "precision") {
+        gameAccuracy.textContent = `${Math.round((counter * 100) / (counter + missesCounter))}%`
     }
 
-    if (counter === 1){
+    if (counter === 1) {
         time.textContent = duration.value
         runTimer()
-    } 
+    }
     randomPlace()
 })
