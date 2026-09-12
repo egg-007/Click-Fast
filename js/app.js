@@ -100,6 +100,10 @@ const resultScore = document.querySelector('#result-score')
 
 const homeRecord = document.querySelector('#home-record')
 
+let records = JSON.parse(localStorage.getItem("clickFast.records")) || {}
+let history = JSON.parse(localStorage.getItem("clickFast.history")) || []
+
+
 function runTimer() {
     let timeLeft = Number(time.textContent);
 
@@ -109,9 +113,33 @@ function runTimer() {
             clearInterval(countdown);
             viewGame.classList.add("hidden")
             resultScore.textContent = counter
-            resultMisses.textContent = missesCounter
-            let Accuracy = (Number(counter) * 100) / (Number(missesCounter) + Number(counter))
-            resultAccuracy.textContent = Accuracy
+            if(gameMode === "precision"){
+                resultMisses.textContent = missesCounter
+                resultAccuracy.textContent = counter + missesCounter === 0 ? "0%" : `${Math.round((counter * 100) / (counter + missesCounter))}%`
+            }else{
+                resultMisses.textContent = "not measured"
+                resultAccuracy.textContent = "not measured"
+            }
+            const recordKey = `${gameMode}_${difficulty.value}_${duration.value}`
+            if(!records[recordKey] || counter > records[recordKey]){
+                records[recordKey] = counter
+                localStorage.setItem("clickFast.records", JSON.stringify(records))
+            }
+            gameRecord.textContent = records[recordKey]
+            homeRecord.textContent = records[recordKey]
+
+            history.push({
+                mode: gameMode,
+                difficulty: difficulty.value,
+                duration: duration.value,
+                score: counter,
+                misses: gameMode === 'precision' ? missesCounter : null,
+                accuracy: gameMode === "precision" ? Math.round((counter * 100) / (counter + missesCounter)) : null
+            })
+            if(history.length > 20){
+                history.shift()
+            }
+            localStorage.setItem("clickFast.history", JSON.stringify(history))
             viewResults.classList.remove("hidden")
             return;
         }
